@@ -33,7 +33,7 @@ Settings are in `com.osmar.CharmOcarina.cfg` inside `BepInEx/config`, section `C
 - `DamageMultiplier` (default `3`, from 1 to 10): how many times more damage the Sword deals to monsters.
 - `WearCooldownSeconds` (default `0.4`, from 0 to 5): pause between two wear charges for the same player, so one swing that hits several times costs only one. 0 wears on every boosted hit.
 
-Section `Debug`: `DebugMode` (default `false`) places a Ocarina on the floor in front of you when a level starts (host or singleplayer) and writes extra log lines. For testing.
+Section `Debug`: `DebugMode` (default `false`) places a Ocarina on the floor in front of you when a level starts (host or singleplayer) and writes extra log lines. For testing. `SpawnNow` (default `false`, needs `DebugMode`): set it to `true` while a level is running to place one right away; it switches itself back off.
 
 ## Issues & Bug Reports
 The official way to report issues, suggest improvements, or submit feedback is by opening an issue on the official GitHub repository:
