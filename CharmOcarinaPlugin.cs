@@ -1,5 +1,6 @@
 using BepInEx;
 using CharmCore.Api;
+using HarmonyLib;
 using UnityEngine;
 
 namespace CharmOcarina
@@ -26,7 +27,8 @@ namespace CharmOcarina
 			// Registering binds Enabled, WearPercent, CooldownSeconds and the Debug section (DebugMode) in this mod's config file.
 			OcarinaCharm charm = new OcarinaCharm();
 			CharmsApi.Register(charm, Config);
-			this.gameObject.AddComponent<SongofPower>().Charm = charm;
+			SongofPower.Charm = charm;
+			new Harmony(PluginGuid).PatchAll();
 
 			Logger.LogInfo($"{PluginName} {PluginVersion} loaded!");
 		}

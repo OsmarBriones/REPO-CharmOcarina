@@ -28,10 +28,51 @@ public class GameContractTests
 	// ---- Members we read or write ----
 
 	[TestMethod]
+	public void HurtCollider_HasTheMembersWeUse()
+	{
+		RequireMethod("HurtCollider", "EnemyHurt", 1);
+		RequireField("HurtCollider", "enemyDamage");
+		RequireField("HurtCollider", "enemyKill");
+		RequireField("HurtCollider", "deathPit");
+		RequireField("HurtCollider", "playerCausingHurt");
+	}
+
+	[TestMethod]
+	public void Enemy_HasHealthFlag()
+	{
+		RequireField("Enemy", "HasHealth");
+	}
+
+	[TestMethod]
+	public void ItemMelee_HasTheMembersWeUse()
+	{
+		RequireField("ItemMelee", "physGrabObject");
+	}
+
+	[TestMethod]
+	public void ItemAttributes_HasTheItem()
+	{
+		RequireField("ItemAttributes", "item");
+		RequireField("Item", "itemName");
+	}
+
+	[TestMethod]
+	public void PhysGrab_HasTheWielderMembers()
+	{
+		RequireField("PhysGrabObject", "playerGrabbing");
+		RequireField("PhysGrabObject", "lastPlayerGrabbing");
+		RequireField("PhysGrabber", "playerAvatar");
+	}
+
+	[TestMethod]
+	public void SemiFunc_HasTheHostCheck()
+	{
+		RequireMethod("SemiFunc", "IsMasterClientOrSingleplayer", 0);
+	}
+
+	[TestMethod]
 	public void Valuable_HasTheValueFields()
 	{
-		// TODO: add one RequireField / RequireMethod line for every game member this charm's effect reads, writes or patches,
-		// so a game update that renames or removes one fails here with a clear message.
 		RequireField("ValuableObject", "dollarValueCurrent");
 	}
 
