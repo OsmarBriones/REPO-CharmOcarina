@@ -61,3 +61,15 @@ Provided by CharmCore: the `Debug.DebugMode` setting (off by default) places the
 - **Wielder rule:** the current grabber wins; the "blamed" player is only a fallback for a Sword nobody holds.
 - **Parameter binding:** the monster is read as `__0` so a renamed parameter cannot break the patch; the contract test checks the method name and parameter count.
 - **RepoAPI reuse gate:** nothing here is generic enough for RepoAPI (all of it depends on this charm's settings and the Sword); no promotion candidate.
+
+## Runtime hygiene
+
+Reviewed against `RepoKit/references/runtime-hygiene.md`.
+
+1. Lifetime of references: fixed. The record of when each wielder last paid wear (dictionary of avatar instance id to time) was a static field of `SongofPower` and was never cleared. It now belongs to `OcarinaCharm` and `OnLevelEnded` clears it. The `Boost` object (holds the wielder and the Ocarina) lives only between the prefix and the finalizer of one hit and is not stored anywhere. `SongofPower.Charm` is the charm, not a game object. No working buffers.
+2. Work frequency: nothing needed. There is no Update loop; the patch runs per monster hit and `Begin` leaves early for non-hosts, a disabled charm, zero damage, kill zones and non-Sword colliders.
+3. Allocations in hot paths: the debug line in `End` (which also formats the wear text) is now guarded with `if (charm.DebugMode)`. The Sword path still allocates (`ToArray` on the grabber list, a closure, the `Boost` object) but only for hits by a Sword wielded by someone; left as is to keep behaviour identical. No `Find...` calls (`GetComponentInParent` runs once per hit, not per frame).
+4. UI: not applicable, the mod has no UI.
+5. Patches: ok. The prefix exits early and cheaply when inactive; the finalizer always restores the damage and keeps no state outside the charm.
+
+Unverified: not run in game.

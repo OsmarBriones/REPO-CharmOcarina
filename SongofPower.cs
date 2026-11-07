@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using CharmCore.Api;
 using CharmOcarina.Domain;
 using UnityEngine;
@@ -40,9 +39,6 @@ namespace CharmOcarina
 
 			internal ValuableObject Ocarina { get; }
 		}
-
-		/// <summary>When each wielder last paid wear, by avatar instance id (host only; at most one entry per player).</summary>
-		private static readonly Dictionary<int, float> LastBilled = new Dictionary<int, float>();
 
 		internal static OcarinaCharm? Charm { get; set; }
 
@@ -110,15 +106,18 @@ namespace CharmOcarina
 
 			int key = boost.Wielder.GetInstanceID();
 			float now = Time.time;
-			float last = LastBilled.TryGetValue(key, out float stored) ? stored : float.MinValue;
+			float last = charm.LastBilled.TryGetValue(key, out float stored) ? stored : float.MinValue;
 			bool bill = DamageBoost.CanBill(now, last, charm.WearCooldownSeconds.Value);
 			if (bill)
 			{
-				LastBilled[key] = now;
+				charm.LastBilled[key] = now;
 				charm.WearValuable(boost.Ocarina, charm.WearPercent);
 			}
 
-			charm.LogDebug($"Song of Power: Sword hit boosted {boost.OriginalDamage} -> {boost.BoostedDamage} (wielder {boost.Wielder.name}); wear {(bill ? charm.WearPercent.ToString("0.#") + "%" : "skipped (cooldown)")}");
+			if (charm.DebugMode)
+			{
+				charm.LogDebug($"Song of Power: Sword hit boosted {boost.OriginalDamage} -> {boost.BoostedDamage} (wielder {boost.Wielder.name}); wear {(bill ? charm.WearPercent.ToString("0.#") + "%" : "skipped (cooldown)")}");
+			}
 		}
 
 		/// <summary>True for the Sword: by item name when the item data is there, otherwise by the prefab name of the object.</summary>
